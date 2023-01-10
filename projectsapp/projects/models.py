@@ -7,7 +7,7 @@ class Project(models.Model):
 
     status_choises = (
         ('new' , 'new'),
-        ('inprogreess' , 'inprogress'),
+        ('inprogress' , 'inprogress'),
         ('completed' , 'completed')
 
     )
