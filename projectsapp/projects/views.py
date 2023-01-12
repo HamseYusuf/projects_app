@@ -1,11 +1,35 @@
-from django.shortcuts import render , reverse
+from django.shortcuts import render , reverse , redirect
 from.models import Project
 from django.views import generic
-from.forms import ProjectsForm
+from django.contrib.auth.mixins import LoginRequiredMixin
+from.forms import ProjectsForm ,  UserRegisterForm
+from django.contrib.auth.models import User
+from django.contrib import messages
 
 
 
-class Createproject(generic.CreateView):
+
+
+def register(request):
+    if request.method == 'POST':
+        form = UserRegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, f'Account created for {username}!')
+            return redirect('login')
+    else:
+        form = UserRegisterForm()
+    return render(request, 'registration/singup.html', {'form': form})
+
+
+   
+   
+
+
+
+
+class Createproject(LoginRequiredMixin,generic.CreateView):
     queryset = Project.objects.all()
     template_name = 'projects/create.html'
     fields = ['title' , 'category' , 'technology' , 'developers' , 'details' , 'status']
@@ -18,7 +42,7 @@ class Createproject(generic.CreateView):
     def get_success_url(self) :
         return reverse('list')
 
-class UpdateProject(generic.UpdateView):
+class UpdateProject(LoginRequiredMixin,generic.UpdateView):
     queryset = Project.objects.all()
     template_name = 'projects/update.html'
     fields = ['title' , 'category' , 'technology' , 'developers' , 'details' , 'status']
@@ -36,7 +60,7 @@ class ProjectDetial(generic.DeleteView):
     template_name = 'projects/detail.html'
     context_object_name = 'project'
 
-class DeleteProject(generic.DeleteView):
+class DeleteProject(LoginRequiredMixin,generic.DeleteView):
     model = Project
     template_name = 'projects/delete.html'
     context_object_name = 'project'
@@ -53,22 +77,22 @@ def list(request):
     return render(request , 'projects/list.html', context)
 
 def inprogress(request):
-    inporgress = Project.objects.filter(status= 'inprogress')
+    projects = Project.objects.filter(status= 'inprogress')
     context = {
-        'projects': inporgress
+        'projects': projects
     }
     return render(request , 'projects/inprogress.html' ,context)
 
 def Newprojects(request):
-    inporgress = Project.objects.filter(status= 'new')
+    projects = Project.objects.filter(status= 'new').order_by('-id')
     context = {
-        'projects': inporgress
+        'projects': projects
     }
     return render(request , 'projects/Newprojects.html' ,context)
 
 def completed(request):
-    inporgress = Project.objects.filter(status= 'completed')
+    projects = Project.objects.filter(status= 'completed')
     context = {
-        'projects': inporgress
+        'projects': projects
     }
     return render(request , 'projects/completed.html' ,context)

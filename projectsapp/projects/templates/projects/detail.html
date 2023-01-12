@@ -1,15 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'projects/base.html' %}
+{% block content %}
+<section class="text-gray-600 body-font flex justify-center">
+  <div class="container flex flex-wrap px-5 py-24 mx-auto items-center">
+    <div class="md:w-1/2 md:pr-12 md:py-8 md:border-r md:border-b-0 mb-10 md:mb-0 pb-10 border-b border-gray-200">
+      <h1 class="sm:text-3xl text-2xl font-medium title-font mb-2 text-gray-900">{{project.title}}</h1>
+      <p class="leading-relaxed text-base">
+        <p class="font-bold">Project Details : </p> {{project.details| title}}.
+      </p>
+      <p class="leading-relaxed text-base">
+        <p class="font-bold">Project contributers : </p> {{project.developers}}.
+      </p>
+      <p class="leading-relaxed text-base">
+        <p class="font-bold">Technology : </p> {{project.technology}}.
+      </p>
+      <p class="leading-relaxed text-base">
+        <p class="font-bold">Status : </p> {{project.status}}.
+      </p>
+      <div class="mt-4">
+        {% if request.user == project.user %}
+        <a href="{% url 'project-update' project.id %}"> <button
+            class="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">Update</button>
+        </a>
+        <a href="{% url 'project-delete' project.id %}"><button
+            class="ml-4 inline-flex text-gray-700 bg-gray-100 border-0 py-2 px-6 focus:outline-none hover:bg-gray-200 rounded text-lg">Delete</button></a>
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-
-<body>
-  {{project.title}}
-</body>
-
-</html>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}

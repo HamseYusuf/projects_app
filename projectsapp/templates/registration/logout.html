@@ -1,0 +1,15 @@
+{% extends 'projects/base.html' %}
+{% load tailwind_filters %}
+
+
+{% block content %}
+<div class="max-w-lg mx-auto">
+  <div class="py-5 border-t border-gray-200">
+    <h1 class="text-4xl text-gray-800 text-center">Logged Out</h1>
+    <a href="{% url 'login'%}">
+      <p class="text-blue-800 mt-5">Login Again </p>
+    </a>
+  </div>
+
+</div>
+{% endblock content %}
